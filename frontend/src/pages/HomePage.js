@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCompany } from '../context/CompanyContext';
 
 const HomePage = () => {
+  const { selectedCompany } = useCompany();
   return (
     <div className="home-page">
       <div className="jumbotron bg-light p-5 rounded mb-4">
-        <h1 className="display-4">Netflix Theme Extraction System</h1>
+        <h1 className="display-4">Company Theme Extraction System</h1>
         <p className="lead">
-          Explore business growth and contraction themes extracted from Netflix's investor relations documents and SEC filings.
+          Explore business growth and contraction themes extracted from {selectedCompany ? `${selectedCompany.name}'s` : 'company'} investor relations documents and SEC filings.
         </p>
         <hr className="my-4" />
         <p>
@@ -36,7 +38,7 @@ const HomePage = () => {
             <div className="card-body">
               <h5 className="card-title">Question Answering</h5>
               <p className="card-text">
-                Ask questions about Netflix's business themes and get AI-powered answers with citations from source documents.
+                Ask questions about {selectedCompany ? `${selectedCompany.name}'s` : 'company'} business themes and get AI-powered answers with citations from source documents.
               </p>
               <Link to="/questions" className="btn btn-sm btn-outline-danger">Ask Questions</Link>
             </div>
@@ -58,7 +60,7 @@ const HomePage = () => {
       <div className="mt-5 p-4 bg-light rounded">
         <h3>How It Works</h3>
         <p>
-          This system uses OpenAI's GPT-4o model to analyze Netflix's investor relations documents and SEC filings, 
+          This system uses OpenAI's GPT-4o model to analyze {selectedCompany ? `${selectedCompany.name}'s` : 'company'} investor relations documents and SEC filings, 
           extracting key business themes related to growth and contraction factors. The themes are categorized and 
           presented with supporting evidence from the source documents.
         </p>

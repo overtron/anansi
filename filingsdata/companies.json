@@ -1,0 +1,14 @@
+[
+  {
+    "id": "netflix",
+    "name": "Netflix",
+    "description": "American subscription streaming service and production company",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"
+  },
+  {
+    "id": "roku",
+    "name": "Roku",
+    "description": "American manufacturer of digital media players for streaming",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Roku_logo.svg/1920px-Roku_logo.svg.png"
+  }
+]

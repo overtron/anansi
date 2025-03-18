@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { questionsApi } from '../services/api';
+import { useCompany } from '../context/CompanyContext';
 
 const QuestionsPage = () => {
+  const { selectedCompany } = useCompany();
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,12 +17,17 @@ const QuestionsPage = () => {
       return;
     }
 
+    if (!selectedCompany) {
+      setError('Please select a company first');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
       setAnswer(null);
       
-      const response = await questionsApi.askQuestion(question);
+      const response = await questionsApi.askQuestion(question, selectedCompany.id);
       setAnswer(response);
       setLoading(false);
     } catch (err) {
@@ -31,13 +38,20 @@ const QuestionsPage = () => {
   };
 
   // Example questions to help users get started
-  const exampleQuestions = [
-    "Why isn't 'international licensing' listed as a theme?",
-    "Is there evidence for 'content localization' as a growth strategy?",
-    "What does the data say about Netflix's approach to original content?",
-    "How does Netflix view competition from other streaming services?",
-    "What are the main financial growth drivers mentioned in the documents?"
-  ];
+  const getExampleQuestions = () => {
+    if (!selectedCompany) return [];
+    
+    const companyName = selectedCompany.name;
+    return [
+      `Why isn't 'international licensing' listed as a theme for ${companyName}?`,
+      `Is there evidence for 'content localization' as a growth strategy for ${companyName}?`,
+      `What does the data say about ${companyName}'s approach to original content?`,
+      `How does ${companyName} view competition from other streaming services?`,
+      `What are the main financial growth drivers mentioned in the ${companyName} documents?`
+    ];
+  };
+  
+  const exampleQuestions = getExampleQuestions();
 
   const handleExampleClick = (exampleQuestion) => {
     setQuestion(exampleQuestion);
@@ -45,14 +59,14 @@ const QuestionsPage = () => {
 
   return (
     <div className="questions-page">
-      <h1 className="mb-4">Ask Questions About Themes</h1>
+      <h1 className="mb-4">Ask Questions About {selectedCompany ? selectedCompany.name : ''} Themes</h1>
       
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">How It Works</h5>
           <p className="card-text">
-            Ask questions about Netflix's business themes and get AI-powered answers with citations from source documents.
-            You can ask about existing themes, missing themes, or any other aspect of Netflix's business strategy.
+            Ask questions about {selectedCompany ? `${selectedCompany.name}'s` : 'company'} business themes and get AI-powered answers with citations from source documents.
+            You can ask about existing themes, missing themes, or any other aspect of {selectedCompany ? `${selectedCompany.name}'s` : 'the company\'s'} business strategy.
           </p>
         </div>
       </div>

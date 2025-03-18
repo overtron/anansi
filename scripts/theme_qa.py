@@ -709,15 +709,30 @@ class ThemeQA:
 
 def main():
     """Main entry point for the script."""
-    parser = argparse.ArgumentParser(description="Answer questions about Netflix business themes")
+    parser = argparse.ArgumentParser(description="Answer questions about company business themes")
     parser.add_argument("--api-key", required=True, help="OpenAI API key")
     parser.add_argument("--question", required=True, help="Question to answer")
-    parser.add_argument("--input-dir", default=DEFAULT_INPUT_DIR, help="Input directory containing documents")
+    parser.add_argument("--company-id", default="netflix", help="Company ID (e.g., 'netflix', 'roku')")
+    parser.add_argument("--input-dir", help="Input directory containing documents (defaults to trackedcompanies/{Company})")
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR, help="Output directory containing themes.json")
     parser.add_argument("--cache-dir", help="Directory to store cache files")
     parser.add_argument("--invalidate-cache", action="store_true", help="Invalidate all caches")
     
     args = parser.parse_args()
+    
+    # Set default input directory based on company_id if not provided
+    if not args.input_dir:
+        args.input_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+                                     "filingsdata", "trackedcompanies", args.company_id.capitalize())
+    
+    # Set themes file name based on company_id
+    global THEMES_JSON_FILE
+    THEMES_JSON_FILE = f"{args.company_id}_themes.json"
+    
+    print(f"Answering question for company: {args.company_id}")
+    print(f"Input directory: {args.input_dir}")
+    print(f"Output directory: {args.output_dir}")
+    print(f"Themes file: {THEMES_JSON_FILE}")
     
     # Initialize ThemeQA
     theme_qa = ThemeQA(
@@ -734,12 +749,18 @@ def main():
     # Load documents
     theme_qa.load_documents()
     
+    # Get company name for context
+    company_name = args.company_id.capitalize()
+    
+    # Add company context to the question
+    contextualized_question = f"Question about {company_name}: {args.question}"
+    
     # Answer question
-    answer = theme_qa.answer_question(args.question)
+    answer = theme_qa.answer_question(contextualized_question)
     
     # Print answer
     print("\n" + "="*80)
-    print(f"Question: {args.question}")
+    print(f"Question about {company_name}: {args.question}")
     print("="*80)
     print(answer)
     print("="*80)

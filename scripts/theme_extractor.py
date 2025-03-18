@@ -8,6 +8,7 @@ supports updates as new documents become available.
 """
 
 import os
+import sys
 import json
 import argparse
 import logging
@@ -200,27 +201,30 @@ class ThemeExtractor:
         """
         logger.info(f"Extracting themes from document: {document_source}")
         
+        # Get company name from THEMES_MD_FILE (e.g., "netflix_themes.md" -> "Netflix")
+        company_name = THEMES_MD_FILE.split('_')[0].capitalize()
+        
         prompt = f"""
-        You are analyzing a document from Netflix's investor relations or SEC filings.
+        You are analyzing a document from {company_name}'s investor relations or SEC filings.
         
         Document source: {document_source}
         
-        Please identify key themes related to Netflix's business growth or contraction factors.
+        Please identify key themes related to {company_name}'s business growth or contraction factors.
         Focus on strategic initiatives, market trends, competitive factors, financial indicators,
         content strategy, technology developments, and regulatory impacts.
         
         For each theme:
         1. Provide a concise name (1-5 words)
-        2. Write a brief description explaining how this theme relates to Netflix's business growth or contraction
+        2. Write a brief description explaining how this theme relates to {company_name}'s business growth or contraction
         3. Include specific evidence from the document that supports this theme
         
         Format your response as a JSON array of theme objects with the following structure:
         [
-            {
+            {{
                 "name": "Theme Name",
-                "description": "Description of how this theme impacts Netflix's business",
+                "description": "Description of how this theme impacts {company_name}'s business",
                 "evidence": "Specific evidence from the document"
-            }
+            }}
         ]
         
         Only include themes that are clearly supported by evidence in the document.
@@ -368,7 +372,7 @@ class ThemeManager:
         
         try:
             with open(md_file_path, 'w', encoding='utf-8') as file:
-                file.write("# Netflix Business Themes\n\n")
+                file.write(f"# {THEMES_MD_FILE.split('_')[0].capitalize()} Business Themes\n\n")
                 file.write(f"*Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n\n")
                 
                 # Group themes by category if they have one, otherwise use "General"
@@ -397,7 +401,7 @@ class ThemeManager:
                             file.write("*Manually added theme*\n\n")
                 
                 file.write("---\n")
-                file.write("This document was generated automatically by the Netflix Theme Extraction Script.\n")
+                file.write(f"This document was generated automatically by the {THEMES_MD_FILE.split('_')[0].capitalize()} Theme Extraction Script.\n")
             
             logger.info(f"Generated markdown file: {md_file_path}")
         
@@ -521,16 +525,38 @@ class ThemeExtractionPipeline:
 
 def main():
     """Main entry point for the script."""
-    parser = argparse.ArgumentParser(description="Extract business themes from Netflix documents")
-    parser.add_argument("--api-key", required=True, help="OpenAI API key")
-    parser.add_argument("--input-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "trackedcompanies", "Netflix"), help="Input directory containing documents")
+    parser = argparse.ArgumentParser(description="Extract business themes from company documents")
+    parser.add_argument("--api-key", help="OpenAI API key (can also use OPENAI_API_KEY environment variable)")
+    parser.add_argument("--company-id", default="netflix", help="Company ID (e.g., 'netflix', 'roku')")
+    parser.add_argument("--input-dir", help="Input directory containing documents (defaults to trackedcompanies/{Company})")
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR, help="Output directory for results")
     
     args = parser.parse_args()
     
+    # Get API key from command line or environment variable
+    api_key = args.api_key or os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        print("Error: OpenAI API key is required. Provide it with --api-key or set OPENAI_API_KEY environment variable.")
+        sys.exit(1)
+    
+    # Set default input directory based on company_id if not provided
+    if not args.input_dir:
+        args.input_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+                                     "filingsdata", "trackedcompanies", args.company_id.capitalize())
+    
+    # Set output file name based on company_id
+    global THEMES_JSON_FILE, THEMES_MD_FILE
+    THEMES_JSON_FILE = f"{args.company_id}_themes.json"
+    THEMES_MD_FILE = f"{args.company_id}_themes.md"
+    
+    print(f"Extracting themes for company: {args.company_id}")
+    print(f"Input directory: {args.input_dir}")
+    print(f"Output directory: {args.output_dir}")
+    print(f"Output files: {THEMES_JSON_FILE}, {THEMES_MD_FILE}")
+    
     # Run the pipeline
     pipeline = ThemeExtractionPipeline(
-        api_key=args.api_key,
+        api_key=api_key,
         input_dir=args.input_dir,
         output_dir=args.output_dir
     )

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { themesApi } from '../services/api';
+import { useCompany } from '../context/CompanyContext';
 
 const ThemesPage = () => {
+  const { selectedCompany } = useCompany();
   const [themes, setThemes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,9 +12,11 @@ const ThemesPage = () => {
 
   useEffect(() => {
     const fetchThemes = async () => {
+      if (!selectedCompany) return;
+      
       try {
         setLoading(true);
-        const data = await themesApi.getAllThemes();
+        const data = await themesApi.getAllThemes(selectedCompany.id);
         setThemes(data);
         setLoading(false);
       } catch (err) {
@@ -23,7 +27,7 @@ const ThemesPage = () => {
     };
 
     fetchThemes();
-  }, []);
+  }, [selectedCompany]);
 
   // Get unique categories from themes
   const categories = ['All', ...new Set(themes.map(theme => theme.category))];
@@ -66,7 +70,7 @@ const ThemesPage = () => {
 
   return (
     <div className="themes-page">
-      <h1 className="mb-4">Netflix Business Themes</h1>
+      <h1 className="mb-4">{selectedCompany ? `${selectedCompany.name} Business Themes` : 'Business Themes'}</h1>
       
       <div className="row mb-4">
         <div className="col-md-6">

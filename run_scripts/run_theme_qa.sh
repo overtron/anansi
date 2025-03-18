@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Netflix Theme Question-Answering Script Runner
+# Company Theme Question-Answering Script Runner
 # This script runs the theme_qa.py script with the necessary arguments
 
 # Get the project root directory
@@ -27,7 +27,8 @@ fi
 # Parse command line arguments
 API_KEY="$OPENAI_API_KEY"
 QUESTION=""
-INPUT_DIR="$PROJECT_ROOT/filingsdata/trackedcompanies/Netflix"
+COMPANY_ID="netflix"
+INPUT_DIR=""
 OUTPUT_DIR="$PROJECT_ROOT/filingsdata/output"
 CACHE_DIR=""
 INVALIDATE_CACHE=false
@@ -41,9 +42,10 @@ usage() {
     echo ""
     echo "Optional options:"
     echo "  -k, --api-key KEY       OpenAI API key (defaults to OPENAI_API_KEY from .env file)"
-    echo "  -i, --input-dir DIR     Input directory containing documents (default: filingsdata/trackedcompanies/Netflix)"
+    echo "  -c, --company ID        Company ID (e.g., 'netflix', 'roku') (default: netflix)"
+    echo "  -i, --input-dir DIR     Input directory containing documents"
     echo "  -o, --output-dir DIR    Output directory for themes and cache (default: filingsdata/output)"
-    echo "  -c, --cache-dir DIR     Directory to store cache files (default: filingsdata/output/cache)"
+    echo "  -d, --cache-dir DIR     Directory to store cache files (default: filingsdata/output/cache)"
     echo "  -r, --refresh           Invalidate cache and reprocess all documents"
     echo "  -h, --help              Display this help message"
     exit 1
@@ -60,6 +62,10 @@ while [[ $# -gt 0 ]]; do
             QUESTION="$2"
             shift 2
             ;;
+        -c|--company)
+            COMPANY_ID="$2"
+            shift 2
+            ;;
         -i|--input-dir)
             INPUT_DIR="$2"
             shift 2
@@ -68,7 +74,7 @@ while [[ $# -gt 0 ]]; do
             OUTPUT_DIR="$2"
             shift 2
             ;;
-        -c|--cache-dir)
+        -d|--cache-dir)
             CACHE_DIR="$2"
             shift 2
             ;;
@@ -98,10 +104,23 @@ if [ -z "$QUESTION" ]; then
     usage
 fi
 
+# Set default input directory based on company_id if not provided
+if [ -z "$INPUT_DIR" ]; then
+    INPUT_DIR="$PROJECT_ROOT/filingsdata/trackedcompanies/${COMPANY_ID^}"
+fi
+
 # Build command
-CMD="python \"$PROJECT_ROOT/scripts/theme_qa.py\" --api-key \"$API_KEY\" --question \"$QUESTION\" --input-dir \"$INPUT_DIR\" --output-dir \"$OUTPUT_DIR\""
+CMD="python \"$PROJECT_ROOT/scripts/theme_qa.py\" --api-key \"$API_KEY\" --question \"$QUESTION\" --company-id \"$COMPANY_ID\""
 
 # Add optional arguments
+if [ -n "$INPUT_DIR" ]; then
+    CMD="$CMD --input-dir \"$INPUT_DIR\""
+fi
+
+if [ -n "$OUTPUT_DIR" ]; then
+    CMD="$CMD --output-dir \"$OUTPUT_DIR\""
+fi
+
 if [ -n "$CACHE_DIR" ]; then
     CMD="$CMD --cache-dir \"$CACHE_DIR\""
 fi
@@ -111,7 +130,7 @@ if [ "$INVALIDATE_CACHE" = true ]; then
 fi
 
 # Print information
-echo "Running Netflix Theme Question-Answering Script"
+echo "Running Theme Question-Answering Script for company: $COMPANY_ID"
 echo "Question: $QUESTION"
 echo "Input directory: $INPUT_DIR"
 echo "Output directory: $OUTPUT_DIR"

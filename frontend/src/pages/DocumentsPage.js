@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { documentsApi } from '../services/api';
+import { useCompany } from '../context/CompanyContext';
 
 const DocumentsPage = () => {
+  const { selectedCompany } = useCompany();
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,9 +12,11 @@ const DocumentsPage = () => {
 
   useEffect(() => {
     const fetchDocuments = async () => {
+      if (!selectedCompany) return;
+      
       try {
         setLoading(true);
-        const data = await documentsApi.getAllDocuments();
+        const data = await documentsApi.getAllDocuments(selectedCompany.id);
         setDocuments(data);
         setLoading(false);
       } catch (err) {
@@ -23,7 +27,7 @@ const DocumentsPage = () => {
     };
 
     fetchDocuments();
-  }, []);
+  }, [selectedCompany]);
 
   // Get unique document types
   const documentTypes = ['All', ...new Set(documents.map(doc => doc.type))];
@@ -65,13 +69,14 @@ const DocumentsPage = () => {
 
   return (
     <div className="documents-page">
-      <h1 className="mb-4">Source Documents</h1>
+      <h1 className="mb-4">{selectedCompany ? `${selectedCompany.name} Source Documents` : 'Source Documents'}</h1>
       
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">About These Documents</h5>
           <p className="card-text">
-            These are the source documents used for theme extraction, including investor relations PDFs and SEC filings.
+            These are the source documents used for theme extraction, including investor relations PDFs and SEC filings
+            for {selectedCompany ? selectedCompany.name : 'the selected company'}.
             The documents are processed to extract business themes related to growth and contraction factors.
           </p>
         </div>

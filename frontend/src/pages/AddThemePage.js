@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { themesApi } from '../services/api';
+import { useCompany } from '../context/CompanyContext';
 
 const AddThemePage = () => {
   const navigate = useNavigate();
+  const { selectedCompany } = useCompany();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    category: 'General'
+    category: 'General',
+    company_id: selectedCompany?.id || ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -34,13 +37,24 @@ const AddThemePage = () => {
       setError('Theme description is required');
       return;
     }
+    
+    if (!selectedCompany) {
+      setError('Please select a company first');
+      return;
+    }
+    
+    // Ensure company_id is set to the currently selected company
+    const themeData = {
+      ...formData,
+      company_id: selectedCompany.id
+    };
 
     try {
       setLoading(true);
       setError(null);
       setSuccess(false);
       
-      await themesApi.createTheme(formData);
+      await themesApi.createTheme(themeData);
       
       setSuccess(true);
       setLoading(false);
@@ -49,7 +63,8 @@ const AddThemePage = () => {
       setFormData({
         name: '',
         description: '',
-        category: 'General'
+        category: 'General',
+        company_id: selectedCompany?.id || ''
       });
       
       // Redirect to themes page after a short delay
@@ -79,14 +94,14 @@ const AddThemePage = () => {
 
   return (
     <div className="add-theme-page">
-      <h1 className="mb-4">Add Manual Theme</h1>
+      <h1 className="mb-4">Add Manual Theme for {selectedCompany ? selectedCompany.name : 'Company'}</h1>
       
       <div className="card mb-4">
         <div className="card-body">
           <h5 className="card-title">About Manual Themes</h5>
           <p className="card-text">
             Manual themes are preserved during updates and can be used to add themes that might not be automatically extracted.
-            These themes will be marked as "Manually added" in the themes list.
+            These themes will be marked as "Manually added" in the themes list for {selectedCompany ? selectedCompany.name : 'the selected company'}.
           </p>
         </div>
       </div>
@@ -130,7 +145,7 @@ const AddThemePage = () => {
             onChange={handleChange}
             placeholder="Describe how this theme relates to Netflix's business growth or contraction..."
           ></textarea>
-          <div className="form-text">A brief description explaining how this theme impacts Netflix's business</div>
+          <div className="form-text">A brief description explaining how this theme impacts {selectedCompany ? `${selectedCompany.name}'s` : 'the company\'s'} business</div>
         </div>
         
         <div className="mb-3">

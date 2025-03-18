@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Netflix Theme Extraction Script Runner
+# Company Theme Extraction Script Runner
 # This script runs the theme_extractor.py script with the necessary arguments
 
 # Get the project root directory
@@ -37,25 +37,79 @@ if [ -z "$VIRTUAL_ENV" ]; then
     echo ""
 fi
 
-# Set default values
-API_KEY="$OPENAI_API_KEY"
-INPUT_DIR="${1:-$PROJECT_ROOT/filingsdata/trackedcompanies/Netflix}"
-OUTPUT_DIR="${2:-$PROJECT_ROOT/filingsdata/output}"
+# Parse command line arguments
+COMPANY_ID="netflix"
+INPUT_DIR=""
+OUTPUT_DIR="$PROJECT_ROOT/filingsdata/output"
+
+# Function to display usage
+usage() {
+    echo "Usage: ./run_theme_extractor.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  -c, --company COMPANY_ID   Company ID (e.g., 'netflix', 'roku') (default: netflix)"
+    echo "  -i, --input-dir DIR        Input directory containing documents"
+    echo "  -o, --output-dir DIR       Output directory for results (default: filingsdata/output)"
+    echo "  -h, --help                 Display this help message"
+    exit 1
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -c|--company)
+            COMPANY_ID="$2"
+            shift 2
+            ;;
+        -i|--input-dir)
+            INPUT_DIR="$2"
+            shift 2
+            ;;
+        -o|--output-dir)
+            OUTPUT_DIR="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            ;;
+    esac
+done
+
+# Set default input directory based on company_id if not provided
+if [ -z "$INPUT_DIR" ]; then
+    INPUT_DIR="$PROJECT_ROOT/filingsdata/trackedcompanies/${COMPANY_ID^}"
+fi
 
 # Print information
-echo "Running Netflix Theme Extraction Script"
+echo "Running Theme Extraction Script for company: $COMPANY_ID"
 echo "Input directory: $INPUT_DIR"
 echo "Output directory: $OUTPUT_DIR"
 echo ""
 
+# Build command
+CMD="python \"$PROJECT_ROOT/scripts/theme_extractor.py\" --api-key \"$OPENAI_API_KEY\" --company-id \"$COMPANY_ID\""
+
+# Add optional arguments
+if [ -n "$INPUT_DIR" ]; then
+    CMD="$CMD --input-dir \"$INPUT_DIR\""
+fi
+
+if [ -n "$OUTPUT_DIR" ]; then
+    CMD="$CMD --output-dir \"$OUTPUT_DIR\""
+fi
+
 # Run the script
-python "$PROJECT_ROOT/scripts/theme_extractor.py" --api-key "$API_KEY" --input-dir "$INPUT_DIR" --output-dir "$OUTPUT_DIR"
+eval $CMD
 
 # Check if the script ran successfully
 if [ $? -eq 0 ]; then
     echo ""
     echo "Theme extraction completed successfully!"
-    echo "Results are available in: $OUTPUT_DIR/netflix_themes.md"
+    echo "Results are available in: $OUTPUT_DIR/${COMPANY_ID}_themes.md"
 else
     echo ""
     echo "Error: Theme extraction failed"

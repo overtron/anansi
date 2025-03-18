@@ -6,6 +6,7 @@ class ThemeBase(BaseModel):
     name: str = Field(..., description="Theme name (1-5 words)")
     description: str = Field(..., description="Theme description")
     category: str = Field("General", description="Theme category")
+    company_id: str = Field(..., description="ID of the company this theme belongs to")
 
 class ThemeCreate(ThemeBase):
     """Model for creating a new theme"""

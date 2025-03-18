@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Document(BaseModel):
     """Model for a document"""
+    company_id: str = Field(..., description="ID of the company this document belongs to")
     filename: str = Field(..., description="Document filename")
     path: str = Field(..., description="Document path")
     type: str = Field(..., description="Document type (PDF, JSON, etc.)")
