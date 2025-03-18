@@ -4,188 +4,280 @@ import { themesApi } from '../services/api';
 import { useCompany } from '../context/CompanyContext';
 
 const AddThemePage = () => {
-  const navigate = useNavigate();
   const { selectedCompany } = useCompany();
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    category: 'General',
-    company_id: selectedCompany?.id || ''
+    category: '',
+    evidence: '',
   });
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate form
-    if (!formData.name.trim()) {
-      setError('Theme name is required');
-      return;
-    }
-    
-    if (!formData.description.trim()) {
-      setError('Theme description is required');
-      return;
-    }
     
     if (!selectedCompany) {
       setError('Please select a company first');
       return;
     }
     
-    // Ensure company_id is set to the currently selected company
-    const themeData = {
-      ...formData,
-      company_id: selectedCompany.id
-    };
-
+    if (!formData.name || !formData.description) {
+      setError('Name and description are required');
+      return;
+    }
+    
     try {
       setLoading(true);
       setError(null);
-      setSuccess(false);
+      
+      const themeData = {
+        ...formData,
+        company_id: selectedCompany.id
+      };
       
       await themesApi.createTheme(themeData);
       
       setSuccess(true);
       setLoading(false);
       
-      // Reset form
+      // Reset form after successful submission
       setFormData({
         name: '',
         description: '',
-        category: 'General',
-        company_id: selectedCompany?.id || ''
+        category: '',
+        evidence: '',
       });
       
-      // Redirect to themes page after a short delay
+      // Redirect to themes page after 2 seconds
       setTimeout(() => {
         navigate('/themes');
       }, 2000);
+      
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create theme. Please try again.');
+      setError('Failed to create theme. Please try again later.');
       setLoading(false);
       console.error('Error creating theme:', err);
     }
   };
-
-  // Common categories for themes
+  
+  const handleReset = () => {
+    setFormData({
+      name: '',
+      description: '',
+      category: '',
+      evidence: '',
+    });
+    setError(null);
+    setSuccess(false);
+  };
+  
+  // Predefined categories
   const categories = [
-    'General',
-    'Content Strategy',
+    'Growth',
+    'Revenue',
+    'Content',
     'Technology',
-    'Financial Performance',
-    'Market Expansion',
+    'Strategy',
     'Competition',
-    'Subscriber Growth',
-    'Regulatory',
-    'Strategic Initiatives',
-    'Other'
+    'Market',
+    'Regulation',
+    'Financial',
+    'Operations',
+    'International',
+    'Diversification'
   ];
 
   return (
-    <div className="add-theme-page">
-      <h1 className="mb-4">Add Manual Theme for {selectedCompany ? selectedCompany.name : 'Company'}</h1>
+    <div className="add-theme-page netflix-fade-in">
+      <h1 className="mb-4">Add New Theme</h1>
       
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">About Manual Themes</h5>
-          <p className="card-text">
-            Manual themes are preserved during updates and can be used to add themes that might not be automatically extracted.
-            These themes will be marked as "Manually added" in the themes list for {selectedCompany ? selectedCompany.name : 'the selected company'}.
-          </p>
+      <div className="row">
+        <div className="col-lg-8">
+          <div className="netflix-panel mb-4">
+            <div className="netflix-panel-header">
+              <span>Theme Information</span>
+              {success && <span className="text-netflix-success">Theme Added Successfully</span>}
+            </div>
+            <div className="netflix-panel-body">
+              {!selectedCompany ? (
+                <div className="netflix-alert netflix-alert-danger">
+                  Please select a company from the dropdown in the navigation bar before adding a theme.
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <div className="netflix-form-group">
+                    <label className="netflix-form-label">Theme Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="netflix-form-control"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="e.g., Content Investment Strategy"
+                      disabled={loading || success}
+                    />
+                    <div className="text-small mt-1">
+                      Enter a concise name that captures the essence of the theme
+                    </div>
+                  </div>
+                  
+                  <div className="netflix-form-group">
+                    <label className="netflix-form-label">Category</label>
+                    <select
+                      name="category"
+                      className="netflix-form-select"
+                      value={formData.category}
+                      onChange={handleChange}
+                      disabled={loading || success}
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map(category => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="text-small mt-1">
+                      Categorize the theme to help with organization and filtering
+                    </div>
+                  </div>
+                  
+                  <div className="netflix-form-group">
+                    <label className="netflix-form-label">Description</label>
+                    <textarea
+                      name="description"
+                      className="netflix-form-control"
+                      rows="4"
+                      value={formData.description}
+                      onChange={handleChange}
+                      placeholder="Describe the theme and its significance to the company's business..."
+                      disabled={loading || success}
+                    ></textarea>
+                    <div className="text-small mt-1">
+                      Provide a detailed explanation of what this theme represents and why it's important
+                    </div>
+                  </div>
+                  
+                  <div className="netflix-form-group">
+                    <label className="netflix-form-label">Supporting Evidence (Optional)</label>
+                    <textarea
+                      name="evidence"
+                      className="netflix-form-control"
+                      rows="4"
+                      value={formData.evidence}
+                      onChange={handleChange}
+                      placeholder="Provide any evidence or quotes from documents that support this theme..."
+                      disabled={loading || success}
+                    ></textarea>
+                    <div className="text-small mt-1">
+                      Include specific quotes, data points, or references that support the existence of this theme
+                    </div>
+                  </div>
+                  
+                  {error && (
+                    <div className="netflix-alert netflix-alert-danger mb-3">
+                      {error}
+                    </div>
+                  )}
+                  
+                  <div className="d-flex">
+                    <button 
+                      type="submit" 
+                      className="netflix-btn me-2"
+                      disabled={loading || success}
+                    >
+                      {loading ? 'Adding Theme...' : 'Add Theme'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="netflix-btn netflix-btn-secondary"
+                      onClick={handleReset}
+                      disabled={loading}
+                    >
+                      Reset Form
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              {success && (
+                <div className="netflix-alert netflix-alert-success mt-3">
+                  Theme added successfully! Redirecting to themes page...
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <div className="col-lg-4">
+          <div className="netflix-panel">
+            <div className="netflix-panel-header">
+              <span>Guidelines</span>
+            </div>
+            <div className="netflix-panel-body">
+              <h5 className="text-netflix-white mb-3">What Makes a Good Theme?</h5>
+              
+              <div className="mb-3">
+                <h6 className="text-netflix-white">Specificity</h6>
+                <p className="text-small">
+                  Be specific about the business aspect the theme represents. Avoid overly broad themes.
+                </p>
+              </div>
+              
+              <div className="mb-3">
+                <h6 className="text-netflix-white">Evidence-Based</h6>
+                <p className="text-small">
+                  Themes should be supported by evidence from company documents or reliable sources.
+                </p>
+              </div>
+              
+              <div className="mb-3">
+                <h6 className="text-netflix-white">Business Relevance</h6>
+                <p className="text-small">
+                  Focus on themes that have a meaningful impact on the company's business strategy or performance.
+                </p>
+              </div>
+              
+              <div className="mb-3">
+                <h6 className="text-netflix-white">Clear Description</h6>
+                <p className="text-small">
+                  Write descriptions that clearly explain what the theme is and why it matters.
+                </p>
+              </div>
+              
+              <div className="mt-4">
+                <h6 className="text-netflix-white">Example Theme</h6>
+                <div className="netflix-card mt-2">
+                  <div className="netflix-card-header">
+                    Original Content Investment
+                  </div>
+                  <div className="netflix-card-body">
+                    <p className="text-small">
+                      <strong>Category:</strong> Content
+                    </p>
+                    <p className="text-small">
+                      <strong>Description:</strong> Strategic focus on increasing investment in original content production to differentiate from competitors and reduce reliance on licensed content.
+                    </p>
+                    <p className="text-small">
+                      <strong>Evidence:</strong> "We're planning to invest $X billion in original content production this year, up X% from last year."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      {success && (
-        <div className="alert alert-success" role="alert">
-          Theme created successfully! Redirecting to themes page...
-        </div>
-      )}
-
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Theme Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="e.g., Content Localization Strategy"
-            maxLength={100}
-          />
-          <div className="form-text">A concise name (1-5 words) for the theme</div>
-        </div>
-        
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">Description</label>
-          <textarea
-            className="form-control"
-            id="description"
-            name="description"
-            rows="4"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Describe how this theme relates to Netflix's business growth or contraction..."
-          ></textarea>
-          <div className="form-text">A brief description explaining how this theme impacts {selectedCompany ? `${selectedCompany.name}'s` : 'the company\'s'} business</div>
-        </div>
-        
-        <div className="mb-3">
-          <label htmlFor="category" className="form-label">Category</label>
-          <select
-            className="form-select"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            {categories.map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-          <div className="form-text">The category this theme belongs to</div>
-        </div>
-        
-        <div className="d-flex gap-2">
-          <button type="submit" className="btn btn-danger" disabled={loading}>
-            {loading ? (
-              <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Creating...
-              </>
-            ) : (
-              'Create Theme'
-            )}
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline-secondary"
-            onClick={() => navigate('/themes')}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
     </div>
   );
 };

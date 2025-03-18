@@ -5,32 +5,30 @@ const CompanySelector = () => {
   const { companies, selectedCompany, changeCompany, loading, error } = useCompany();
 
   if (loading) {
-    return <div>Loading companies...</div>;
+    return <div className="netflix-loading">Loading...</div>;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="netflix-alert netflix-alert-danger">{error}</div>;
   }
 
   if (!companies || companies.length === 0) {
-    return <div>No companies available</div>;
+    return <div className="text-netflix-white">No companies available</div>;
   }
 
   return (
-    <div className="company-selector">
-      <label htmlFor="company-select">Select Company: </label>
-      <select
-        id="company-select"
-        value={selectedCompany?.id || ''}
-        onChange={(e) => changeCompany(e.target.value)}
-      >
-        {companies.map((company) => (
-          <option key={company.id} value={company.id}>
-            {company.name}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      className="netflix-form-select"
+      value={selectedCompany?.id || ''}
+      onChange={(e) => changeCompany(e.target.value)}
+      aria-label="Select company"
+    >
+      {companies.map((company) => (
+        <option key={company.id} value={company.id}>
+          {company.name}
+        </option>
+      ))}
+    </select>
   );
 };
 
