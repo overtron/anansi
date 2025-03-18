@@ -32,7 +32,7 @@ The system consists of three main components:
 
 ```bash
 # Navigate to the backend directory
-cd filingsdata/backend
+cd backend
 
 # Create a virtual environment (recommended)
 python -m venv venv
@@ -54,7 +54,7 @@ The backend API will be available at [http://localhost:8000](http://localhost:80
 
 ```bash
 # Navigate to the frontend directory
-cd filingsdata/frontend
+cd frontend
 
 # Install dependencies
 npm install
@@ -68,7 +68,7 @@ The frontend will be available at [http://localhost:3000](http://localhost:3000)
 ## Directory Structure
 
 ```
-filingsdata/
+anansi/                     # Root project directory
 ├── backend/                # Backend API
 │   ├── app/                # FastAPI application
 │   │   ├── api/            # API routers
@@ -84,18 +84,22 @@ filingsdata/
 │   │   └── services/       # API services
 │   ├── package.json        # Frontend dependencies
 │   └── README.md           # Frontend documentation
-├── output/                 # Output files from theme extraction
-│   ├── themes.json         # Extracted themes in JSON format
-│   └── netflix_themes.md   # Formatted markdown of themes
-├── trackedcompanies/       # Source documents
-│   └── Netflix/            # Netflix documents
-│       ├── investorrelations/  # Investor relations PDFs
-│       └── sec-submissions/    # SEC filings
-├── theme_extractor.py      # Theme extraction script
-├── theme_qa.py             # Question-answering script
-├── add_manual_theme.py     # Script for adding manual themes
-├── run_theme_extractor.sh  # Script to run theme extraction
-├── run_theme_qa.sh         # Script to run question answering
+├── scripts/                # Utility scripts
+│   ├── theme_extractor.py  # Theme extraction script
+│   ├── theme_qa.py         # Question-answering script
+│   └── add_manual_theme.py # Script for adding manual themes
+├── run_scripts/            # Runner scripts
+│   ├── run_theme_extractor.sh  # Script to run theme extraction
+│   ├── run_theme_qa.sh     # Script to run question answering
+│   └── run_dev.sh          # Script to run development environment
+├── filingsdata/            # Data directory
+│   ├── output/             # Output files from theme extraction
+│   │   ├── themes.json     # Extracted themes in JSON format
+│   │   └── netflix_themes.md # Formatted markdown of themes
+│   └── trackedcompanies/   # Source documents
+│       └── Netflix/        # Netflix documents
+│           ├── investorrelations/  # Investor relations PDFs
+│           └── sec-submissions/    # SEC filings
 └── README.md               # This file
 ```
 
@@ -113,17 +117,17 @@ Before using the web interface, you need to extract themes from the source docum
 
 ```bash
 # Run the theme extraction script
-python theme_extractor.py --api-key YOUR_OPENAI_API_KEY
+python scripts/theme_extractor.py --api-key YOUR_OPENAI_API_KEY
 ```
 
 Or use the provided shell script:
 
 ```bash
 # Make the script executable (if not already)
-chmod +x run_theme_extractor.sh
+chmod +x run_scripts/run_theme_extractor.sh
 
 # Run the script
-./run_theme_extractor.sh YOUR_OPENAI_API_KEY
+./run_scripts/run_theme_extractor.sh YOUR_OPENAI_API_KEY
 ```
 
 ### Using the Web Interface
@@ -150,22 +154,22 @@ You can use the following options with the `run_theme_qa.sh` script:
 
 ```bash
 # Basic usage
-./run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here"
+./run_scripts/run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here"
 
 # Specify a custom cache directory
-./run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here" -c "custom/cache/dir"
+./run_scripts/run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here" -c "custom/cache/dir"
 
 # Force reprocessing of all documents (invalidate cache)
-./run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here" -r
+./run_scripts/run_theme_qa.sh -k YOUR_OPENAI_API_KEY -q "Your question here" -r
 
 # Get help with all options
-./run_theme_qa.sh -h
+./run_scripts/run_theme_qa.sh -h
 ```
 
 For Windows users, the `run_theme_qa.bat` script provides the same functionality:
 
 ```batch
-run_theme_qa.bat -k YOUR_OPENAI_API_KEY -q "Your question here"
+run_scripts/run_theme_qa.bat -k YOUR_OPENAI_API_KEY -q "Your question here"
 ```
 
 The caching system significantly improves performance for repeated questions and when processing the same documents multiple times.
@@ -181,7 +185,7 @@ For production deployment, consider:
 1. Building the frontend for production:
 
 ```bash
-cd filingsdata/frontend
+cd frontend
 npm run build
 ```
 

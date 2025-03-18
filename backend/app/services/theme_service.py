@@ -8,14 +8,15 @@ from datetime import datetime
 # Add the parent directory to sys.path to allow importing the theme_extractor module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-# Add the backend directory to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add the scripts directory to sys.path
+scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "scripts")
+sys.path.append(scripts_dir)
 
 # Import models
 from app.models.theme import Theme, ThemeCreate
 
 # Constants
-DEFAULT_THEMES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "output", "themes.json")
+DEFAULT_THEMES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "output", "themes.json")
 
 class ThemeService:
     """Service for managing themes"""

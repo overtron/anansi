@@ -8,15 +8,16 @@ from datetime import datetime
 # Add the parent directory to sys.path to allow importing the theme_extractor module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-# Add the backend directory to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add the scripts directory to sys.path
+scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "scripts")
+sys.path.append(scripts_dir)
 
 # Import models
 from app.models.document import Document, DocumentList
 
 # Constants
-DEFAULT_PROCESSED_FILES_JSON = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "output", "processed_files.json")
-DEFAULT_DOCUMENTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "trackedcompanies", "Netflix")
+DEFAULT_PROCESSED_FILES_JSON = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "output", "processed_files.json")
+DEFAULT_DOCUMENTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "trackedcompanies", "Netflix")
 
 class DocumentService:
     """Service for managing documents"""

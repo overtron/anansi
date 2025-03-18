@@ -12,7 +12,7 @@ import argparse
 from datetime import datetime
 
 # Constants
-DEFAULT_THEMES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output", "themes.json")
+DEFAULT_THEMES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "output", "themes.json")
 
 def load_themes(themes_file):
     """Load existing themes from JSON file."""

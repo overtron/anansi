@@ -7,8 +7,9 @@ import re
 # Add the parent directory to sys.path to allow importing the theme_qa module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-# Add the backend directory to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add the scripts directory to sys.path
+scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "scripts")
+sys.path.append(scripts_dir)
 
 # Import models
 from app.models.question import QuestionRequest, QuestionResponse
@@ -21,8 +22,8 @@ class QuestionService:
     
     def __init__(self, api_key: str, input_dir: Optional[str] = None, output_dir: Optional[str] = None, cache_dir: Optional[str] = None):
         self.api_key = api_key
-        self.input_dir = input_dir or os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "trackedcompanies", "Netflix")
-        self.output_dir = output_dir or os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "output")
+        self.input_dir = input_dir or os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "trackedcompanies", "Netflix")
+        self.output_dir = output_dir or os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "output")
         self.cache_dir = cache_dir or os.path.join(self.output_dir, "cache")
         
         # Initialize ThemeQA

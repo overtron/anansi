@@ -11,6 +11,9 @@ fi
 # Set OpenAI API key
 export OPENAI_API_KEY="$1"
 
+# Get the project root directory
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 # Function to kill background processes on exit
 cleanup() {
     echo "Stopping all processes..."
@@ -23,7 +26,7 @@ trap cleanup EXIT INT TERM
 
 # Check if backend dependencies are installed
 echo "Checking backend dependencies..."
-cd backend
+cd "$PROJECT_ROOT/backend"
 if [ ! -f "requirements.txt" ]; then
     echo "Error: Backend requirements.txt not found"
     exit 1
@@ -52,7 +55,6 @@ fi
 echo "Starting backend server..."
 python run.py &
 BACKEND_PID=$!
-cd ..
 
 # Wait for backend to start
 echo "Waiting for backend to start..."
@@ -66,7 +68,7 @@ fi
 
 # Check if frontend dependencies are installed
 echo "Checking frontend dependencies..."
-cd frontend
+cd "$PROJECT_ROOT/frontend"
 if [ ! -d "node_modules" ]; then
     echo "Installing frontend dependencies..."
     npm install
@@ -80,7 +82,6 @@ fi
 echo "Starting frontend development server..."
 npm start &
 FRONTEND_PID=$!
-cd ..
 
 # Wait for frontend to start
 echo "Waiting for frontend to start..."

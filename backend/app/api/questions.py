@@ -11,8 +11,8 @@ router = APIRouter()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "dummy-key")
 
 # Default paths
-DEFAULT_INPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "trackedcompanies", "Netflix")
-DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "output")
+DEFAULT_INPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "trackedcompanies", "Netflix")
+DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "filingsdata", "output")
 DEFAULT_CACHE_DIR = os.path.join(DEFAULT_OUTPUT_DIR, "cache")
 
 def get_question_service():

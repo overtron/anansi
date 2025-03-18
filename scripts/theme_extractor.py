@@ -29,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Constants
-DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "output")
 THEMES_JSON_FILE = "themes.json"
 THEMES_MD_FILE = "netflix_themes.md"
 PROCESSED_FILES_JSON = "processed_files.json"
@@ -523,7 +523,7 @@ def main():
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(description="Extract business themes from Netflix documents")
     parser.add_argument("--api-key", required=True, help="OpenAI API key")
-    parser.add_argument("--input-dir", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "trackedcompanies", "Netflix"), help="Input directory containing documents")
+    parser.add_argument("--input-dir", default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "trackedcompanies", "Netflix"), help="Input directory containing documents")
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR, help="Output directory for results")
     
     args = parser.parse_args()

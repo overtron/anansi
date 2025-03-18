@@ -24,8 +24,8 @@ fi
 
 # Set default values
 API_KEY="$1"
-INPUT_DIR="${2:-trackedcompanies/Netflix}"
-OUTPUT_DIR="${3:-output}"
+INPUT_DIR="${2:-filingsdata/trackedcompanies/Netflix}"
+OUTPUT_DIR="${3:-filingsdata/output}"
 
 # Print information
 echo "Running Netflix Theme Extraction Script"
@@ -34,7 +34,7 @@ echo "Output directory: $OUTPUT_DIR"
 echo ""
 
 # Run the script
-python theme_extractor.py --api-key "$API_KEY" --input-dir "$INPUT_DIR" --output-dir "$OUTPUT_DIR"
+python ../scripts/theme_extractor.py --api-key "$API_KEY" --input-dir "$INPUT_DIR" --output-dir "$OUTPUT_DIR"
 
 # Check if the script ran successfully
 if [ $? -eq 0 ]; then

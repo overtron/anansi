@@ -1,3 +1,8 @@
+# Project specific
+filingsdata/trackedcompanies/
+filingsdata/output/
+venv/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -20,33 +25,15 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
-*.manifest
-*.spec
-pip-log.txt
-pip-delete-this-directory.txt
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Virtual Environments
-venv/
-ENV/
-env/
-netflix-themes-env/
 .env
 .venv
 env/
+ENV/
 env.bak/
 venv.bak/
+.pytest_cache/
 
-# Node.js / React
+# Node.js
 node_modules/
 npm-debug.log
 yarn-debug.log
@@ -54,44 +41,60 @@ yarn-error.log
 .pnp/
 .pnp.js
 coverage/
+.next/
+out/
 build/
 .DS_Store
+*.pem
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Project-specific
-output/cache/
-**/cache/
-*.pkl
-document_text_cache.json
-vector_db_cache.pkl
-file_hashes.json
-
-# API keys and secrets
-.env
-*.pem
-
-# OS specific
+# macOS
 .DS_Store
-.DS_Store?
+.AppleDouble
+.LSOverride
+Icon
 ._*
+.DocumentRevisions-V100
+.fseventsd
 .Spotlight-V100
+.TemporaryItems
 .Trashes
-ehthumbs.db
-Thumbs.db
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
-# IDE specific
+# Windows
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# IDE
 .idea/
 .vscode/
 *.swp
 *.swo
-*~
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/

@@ -33,8 +33,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Constants
-DEFAULT_INPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "trackedcompanies", "Netflix")
-DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
+DEFAULT_INPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "trackedcompanies", "Netflix")
+DEFAULT_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "filingsdata", "output")
 THEMES_JSON_FILE = "themes.json"
 OPENAI_MODEL = "gpt-4o"
 EMBEDDING_MODEL = "text-embedding-3-large"

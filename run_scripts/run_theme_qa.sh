@@ -18,8 +18,8 @@ fi
 # Parse command line arguments
 API_KEY=""
 QUESTION=""
-INPUT_DIR="trackedcompanies/Netflix"
-OUTPUT_DIR="output"
+INPUT_DIR="filingsdata/trackedcompanies/Netflix"
+OUTPUT_DIR="filingsdata/output"
 CACHE_DIR=""
 INVALIDATE_CACHE=false
 
@@ -32,9 +32,9 @@ usage() {
     echo "  -q, --question TEXT     Question to answer"
     echo ""
     echo "Optional options:"
-    echo "  -i, --input-dir DIR     Input directory containing documents (default: trackedcompanies/Netflix)"
-    echo "  -o, --output-dir DIR    Output directory for themes and cache (default: output)"
-    echo "  -c, --cache-dir DIR     Directory to store cache files (default: output/cache)"
+    echo "  -i, --input-dir DIR     Input directory containing documents (default: filingsdata/trackedcompanies/Netflix)"
+    echo "  -o, --output-dir DIR    Output directory for themes and cache (default: filingsdata/output)"
+    echo "  -c, --cache-dir DIR     Directory to store cache files (default: filingsdata/output/cache)"
     echo "  -r, --refresh           Invalidate cache and reprocess all documents"
     echo "  -h, --help              Display this help message"
     exit 1
@@ -89,7 +89,7 @@ if [ -z "$QUESTION" ]; then
 fi
 
 # Build command
-CMD="python theme_qa.py --api-key \"$API_KEY\" --question \"$QUESTION\" --input-dir \"$INPUT_DIR\" --output-dir \"$OUTPUT_DIR\""
+CMD="python ../scripts/theme_qa.py --api-key \"$API_KEY\" --question \"$QUESTION\" --input-dir \"$INPUT_DIR\" --output-dir \"$OUTPUT_DIR\""
 
 # Add optional arguments
 if [ -n "$CACHE_DIR" ]; then
