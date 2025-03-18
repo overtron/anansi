@@ -3,6 +3,15 @@
 # Netflix Theme Question-Answering Script Runner
 # This script runs the theme_qa.py script with the necessary arguments
 
+# Get the project root directory
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Load environment variables from .env file
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    echo "Loading environment variables from .env file..."
+    export $(grep -v '^#' "$PROJECT_ROOT/.env" | xargs)
+fi
+
 # Check if running in a virtual environment
 if [ -z "$VIRTUAL_ENV" ]; then
     echo "Warning: It is recommended to run this script in a Python virtual environment."
@@ -16,10 +25,10 @@ if [ -z "$VIRTUAL_ENV" ]; then
 fi
 
 # Parse command line arguments
-API_KEY=""
+API_KEY="$OPENAI_API_KEY"
 QUESTION=""
-INPUT_DIR="filingsdata/trackedcompanies/Netflix"
-OUTPUT_DIR="filingsdata/output"
+INPUT_DIR="$PROJECT_ROOT/filingsdata/trackedcompanies/Netflix"
+OUTPUT_DIR="$PROJECT_ROOT/filingsdata/output"
 CACHE_DIR=""
 INVALIDATE_CACHE=false
 
@@ -28,10 +37,10 @@ usage() {
     echo "Usage: ./run_theme_qa.sh [OPTIONS]"
     echo ""
     echo "Required options:"
-    echo "  -k, --api-key KEY       OpenAI API key"
     echo "  -q, --question TEXT     Question to answer"
     echo ""
     echo "Optional options:"
+    echo "  -k, --api-key KEY       OpenAI API key (defaults to OPENAI_API_KEY from .env file)"
     echo "  -i, --input-dir DIR     Input directory containing documents (default: filingsdata/trackedcompanies/Netflix)"
     echo "  -o, --output-dir DIR    Output directory for themes and cache (default: filingsdata/output)"
     echo "  -c, --cache-dir DIR     Directory to store cache files (default: filingsdata/output/cache)"
@@ -80,6 +89,7 @@ done
 # Check required arguments
 if [ -z "$API_KEY" ]; then
     echo "Error: OpenAI API key is required"
+    echo "Either provide it with --api-key or add it to the .env file as OPENAI_API_KEY"
     usage
 fi
 
@@ -89,7 +99,7 @@ if [ -z "$QUESTION" ]; then
 fi
 
 # Build command
-CMD="python ../scripts/theme_qa.py --api-key \"$API_KEY\" --question \"$QUESTION\" --input-dir \"$INPUT_DIR\" --output-dir \"$OUTPUT_DIR\""
+CMD="python \"$PROJECT_ROOT/scripts/theme_qa.py\" --api-key \"$API_KEY\" --question \"$QUESTION\" --input-dir \"$INPUT_DIR\" --output-dir \"$OUTPUT_DIR\""
 
 # Add optional arguments
 if [ -n "$CACHE_DIR" ]; then

@@ -1,18 +1,27 @@
 #!/bin/bash
 # Run both the backend and frontend in development mode
 
-# Check if OpenAI API key is provided
-if [ -z "$1" ]; then
-    echo "Error: OpenAI API key is required"
-    echo "Usage: ./run_dev.sh YOUR_OPENAI_API_KEY"
+# Get the project root directory
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Load environment variables from .env file
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    echo "Loading environment variables from .env file..."
+    export $(grep -v '^#' "$PROJECT_ROOT/.env" | xargs)
+else
+    echo "Error: .env file not found in project root"
+    echo "Please create a .env file with your OPENAI_API_KEY"
+    echo "Example: OPENAI_API_KEY=your_api_key_here"
     exit 1
 fi
 
-# Set OpenAI API key
-export OPENAI_API_KEY="$1"
-
-# Get the project root directory
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Check if OPENAI_API_KEY is set
+if [ -z "$OPENAI_API_KEY" ]; then
+    echo "Error: OPENAI_API_KEY not found in .env file"
+    echo "Please add your OpenAI API key to the .env file"
+    echo "Example: OPENAI_API_KEY=your_api_key_here"
+    exit 1
+fi
 
 # Function to kill background processes on exit
 cleanup() {
