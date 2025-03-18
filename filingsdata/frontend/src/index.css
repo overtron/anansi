@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.navbar {
+  background-color: #e50914 !important; /* Netflix red */
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: white !important;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.card {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.theme-card {
+  height: 100%;
+}
+
+.theme-card .card-header {
+  background-color: #e50914;
+  color: white;
+  font-weight: bold;
+}
+
+.question-form {
+  margin-bottom: 30px;
+}
+
+.answer-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  border-left: 5px solid #e50914;
+}
+
+.source-citation {
+  font-style: italic;
+  color: #6c757d;
+  margin-top: 10px;
+}
+
+.theme-category {
+  color: #e50914;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e50914;
+  padding-bottom: 10px;
+}
