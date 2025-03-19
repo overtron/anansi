@@ -1,6 +1,6 @@
 # Company Theme Extraction and Question-Answering System with Web Interface
 
-This project provides a complete system for extracting business themes from company investor relations documents and SEC filings, and a web interface for exploring these themes and asking questions about them. The system supports multiple companies, with Netflix included as the default example.
+This project provides a complete system for extracting business themes from company investor relations documents and a web interface for exploring these themes and asking questions about them. The system supports multiple companies, with Netflix included as the default example.
 
 > **Note:** This entire project, including all code, documentation, and screenshots, was generated using Cline, an AI assistant for software development.
 
@@ -30,7 +30,7 @@ The system consists of three main components:
 - Python 3.8+ (for backend and theme extraction)
 - Node.js and npm (for frontend)
 - OpenAI API key
-- Source documents (investor relations PDFs and SEC filings) organized by company
+- Source documents (investor relations PDFs) organized by company
 
 ## Getting Started
 
@@ -58,22 +58,19 @@ Create the necessary directories for your company documents:
 
 ```bash
 mkdir -p filingsdata/trackedcompanies/Netflix/investorrelations
-mkdir -p filingsdata/trackedcompanies/Netflix/sec-submissions
 mkdir -p filingsdata/output
 ```
 
 ### 4. Add Company Documents
 
-Place your company documents in the appropriate directories:
+Place your company documents in the appropriate directory:
 
 - Investor relations PDFs go in `filingsdata/trackedcompanies/Netflix/investorrelations/`
-- SEC filings (JSON format) go in `filingsdata/trackedcompanies/Netflix/sec-submissions/`
 
 For additional companies, create similar directory structures with the company name:
 
 ```bash
 mkdir -p filingsdata/trackedcompanies/CompanyName/investorrelations
-mkdir -p filingsdata/trackedcompanies/CompanyName/sec-submissions
 ```
 
 ### 5. Install Dependencies
@@ -189,8 +186,7 @@ anansi/                     # Root project directory
 │   │   └── {company_id}_themes.md       # Formatted markdown of themes
 │   └── trackedcompanies/   # Source documents
 │       ├── Netflix/        # Netflix documents
-│       │   ├── investorrelations/  # Investor relations PDFs
-│       │   └── sec-submissions/    # SEC filings
+│       │   └── investorrelations/  # Investor relations PDFs
 │       └── {Company}/      # Other company documents
 ├── docs/                   # Documentation
 │   └── images/             # Screenshots and images
@@ -272,12 +268,11 @@ To add a new company to the system:
 
 1. Create a new directory under `filingsdata/trackedcompanies/` with the company name (e.g., `filingsdata/trackedcompanies/Roku`)
 2. Add investor relations documents to the `investorrelations/` subdirectory
-3. Add SEC filings to the `sec-submissions/` subdirectory
-4. Run the theme extraction script for the new company:
+3. Run the theme extraction script for the new company:
    ```bash
    ./run_scripts/run_theme_extractor.sh -k YOUR_OPENAI_API_KEY -c roku
    ```
-5. The company will automatically appear in the company selector in the web interface
+4. The company will automatically appear in the company selector in the web interface
 
 ## Troubleshooting
 
@@ -289,7 +284,6 @@ To add a new company to the system:
 
 2. **Document Processing Issues**
    - Make sure PDF files are text-based and not scanned images
-   - Verify that JSON files follow the expected format for SEC filings
 
 3. **Backend Connection Issues**
    - Check that the backend server is running on port 8000
