@@ -260,19 +260,27 @@ class VectorDatabase:
 class ThemeQA:
     """Handles question answering about themes using source documents."""
     
-    def __init__(self, api_key: str, input_dir: str, output_dir: str, cache_dir: str = None):
+    def __init__(self, api_key: str, input_dir: str, output_dir: str, cache_dir: str = None, company_id: str = "netflix"):
         self.input_dir = input_dir
         self.output_dir = output_dir
-        self.themes_file = os.path.join(output_dir, THEMES_JSON_FILE)
+        self.company_id = company_id.lower()
+        
+        # Set themes file based on company_id
+        self.themes_file = os.path.join(output_dir, f"{self.company_id}_themes.json")
         
         # Set up cache directory
-        self.cache_dir = cache_dir or os.path.join(output_dir, CACHE_DIR)
+        self.cache_dir = cache_dir or os.path.join(output_dir, CACHE_DIR, self.company_id)
         os.makedirs(self.cache_dir, exist_ok=True)
         
-        # Cache file paths
-        self.text_cache_file = os.path.join(self.cache_dir, TEXT_CACHE_FILE)
-        self.vector_db_cache_file = os.path.join(self.cache_dir, VECTOR_DB_CACHE_FILE)
-        self.file_hash_cache_file = os.path.join(self.cache_dir, FILE_HASH_CACHE_FILE)
+        # Cache file paths with company_id to ensure isolation
+        self.text_cache_file = os.path.join(self.cache_dir, f"{self.company_id}_{TEXT_CACHE_FILE}")
+        self.vector_db_cache_file = os.path.join(self.cache_dir, f"{self.company_id}_{VECTOR_DB_CACHE_FILE}")
+        self.file_hash_cache_file = os.path.join(self.cache_dir, f"{self.company_id}_{FILE_HASH_CACHE_FILE}")
+        
+        logger.info(f"Initializing ThemeQA for company: {self.company_id}")
+        logger.info(f"Input directory: {self.input_dir}")
+        logger.info(f"Cache directory: {self.cache_dir}")
+        logger.info(f"Themes file: {self.themes_file}")
         
         # Initialize OpenAI client
         self.openai_client = openai.OpenAI(api_key=api_key)
@@ -567,6 +575,9 @@ class ThemeQA:
             "missing", "not included", "isn't listed", "not listed", "absent", "omitted", "excluded"
         ])
         
+        # Get company name for prompts
+        company_name = self.company_id.capitalize()
+        
         # Create prompt based on question type
         if is_missing_theme_question:
             # Extract the potential theme name from the question
@@ -577,7 +588,7 @@ class ThemeQA:
                 potential_theme = "the mentioned theme"
             
             prompt = f"""
-            You are analyzing Netflix's investor relations and SEC filings to determine why a specific theme might not be included in the extracted themes.
+            You are analyzing {company_name}'s investor relations and SEC filings to determine why a specific theme might not be included in the extracted themes.
             
             Question: {question}
             
@@ -596,7 +607,7 @@ class ThemeQA:
             """
         else:
             prompt = f"""
-            You are analyzing Netflix's investor relations and SEC filings to answer questions about business themes.
+            You are analyzing {company_name}'s investor relations and SEC filings to answer questions about business themes.
             
             Question: {question}
             
@@ -623,7 +634,7 @@ class ThemeQA:
             if excess_tokens >= context_tokens:
                 # If we need to remove more tokens than we have in context, use a simplified prompt
                 prompt = f"""
-                You are analyzing Netflix's investor relations and SEC filings to answer questions about business themes.
+                You are analyzing {company_name}'s investor relations and SEC filings to answer questions about business themes.
                 
                 Question: {question}
                 
@@ -658,7 +669,7 @@ class ThemeQA:
                 # Recreate the prompt with truncated context
                 if is_missing_theme_question:
                     prompt = f"""
-                    You are analyzing Netflix's investor relations and SEC filings to determine why a specific theme might not be included in the extracted themes.
+                    You are analyzing {company_name}'s investor relations and SEC filings to determine why a specific theme might not be included in the extracted themes.
                     
                     Question: {question}
                     
@@ -677,7 +688,7 @@ class ThemeQA:
                     """
                 else:
                     prompt = f"""
-                    You are analyzing Netflix's investor relations and SEC filings to answer questions about business themes.
+                    You are analyzing {company_name}'s investor relations and SEC filings to answer questions about business themes.
                     
                     Question: {question}
                     
@@ -739,7 +750,8 @@ def main():
         api_key=args.api_key,
         input_dir=args.input_dir,
         output_dir=args.output_dir,
-        cache_dir=args.cache_dir
+        cache_dir=args.cache_dir,
+        company_id=args.company_id
     )
     
     # Invalidate cache if requested

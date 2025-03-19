@@ -2,6 +2,8 @@
 
 This project provides a complete system for extracting business themes from company investor relations documents and SEC filings, and a web interface for exploring these themes and asking questions about them. The system supports multiple companies, with Netflix included as the default example.
 
+![Home Page](docs/images/home_page.md)
+
 ## System Components
 
 The system consists of three main components:
@@ -28,44 +30,117 @@ The system consists of three main components:
 - OpenAI API key
 - Source documents (investor relations PDFs and SEC filings) organized by company
 
-## Quick Start
+## Getting Started
 
-### 1. Set Up the Backend
-
-```bash
-# Navigate to the backend directory
-cd backend
-
-# Create a virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set your OpenAI API key
-export OPENAI_API_KEY=your-api-key  # On Windows: set OPENAI_API_KEY=your-api-key
-
-# Run the backend server
-python run.py
-```
-
-The backend API will be available at [http://localhost:8000](http://localhost:8000).
-
-### 2. Set Up the Frontend
+### 1. Clone the Repository
 
 ```bash
-# Navigate to the frontend directory
-cd frontend
-
-# Install dependencies
-npm install
-
-# Run the development server
-npm start
+git clone https://github.com/yourusername/company-theme-analysis.git
+cd company-theme-analysis
 ```
 
-The frontend will be available at [http://localhost:3000](http://localhost:3000).
+### 2. Set Up Environment Variables
+
+Create a `.env` file in the project root directory with your OpenAI API key:
+
+```
+# OpenAI API Key
+OPENAI_API_KEY=your-openai-api-key-here
+```
+
+You can obtain an OpenAI API key by signing up at [https://platform.openai.com/](https://platform.openai.com/).
+
+### 3. Set Up Directory Structure
+
+Create the necessary directories for your company documents:
+
+```bash
+mkdir -p filingsdata/trackedcompanies/Netflix/investorrelations
+mkdir -p filingsdata/trackedcompanies/Netflix/sec-submissions
+mkdir -p filingsdata/output
+```
+
+### 4. Add Company Documents
+
+Place your company documents in the appropriate directories:
+
+- Investor relations PDFs go in `filingsdata/trackedcompanies/Netflix/investorrelations/`
+- SEC filings (JSON format) go in `filingsdata/trackedcompanies/Netflix/sec-submissions/`
+
+For additional companies, create similar directory structures with the company name:
+
+```bash
+mkdir -p filingsdata/trackedcompanies/CompanyName/investorrelations
+mkdir -p filingsdata/trackedcompanies/CompanyName/sec-submissions
+```
+
+### 5. Install Dependencies
+
+The project includes setup scripts to install all required dependencies:
+
+```bash
+# Make the setup script executable
+chmod +x run_scripts/setup_environment.sh
+
+# Run the setup script
+./run_scripts/setup_environment.sh
+```
+
+For Windows users:
+
+```batch
+run_scripts\setup_environment.bat
+```
+
+### 6. Extract Themes
+
+Run the theme extraction script to analyze your documents and extract business themes:
+
+```bash
+# Make the script executable
+chmod +x run_scripts/run_theme_extractor.sh
+
+# Run for Netflix
+./run_scripts/run_theme_extractor.sh -k $OPENAI_API_KEY -c netflix
+```
+
+For Windows users:
+
+```batch
+run_scripts\run_theme_extractor.bat -k %OPENAI_API_KEY% -c netflix
+```
+
+### 7. Start the Development Environment
+
+Start both the backend and frontend servers:
+
+```bash
+# Make the script executable
+chmod +x run_scripts/run_dev.sh
+
+# Start the development environment
+./run_scripts/run_dev.sh
+```
+
+For Windows users:
+
+```batch
+run_scripts\run_dev.bat
+```
+
+The application will be available at:
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API: [http://localhost:8000](http://localhost:8000)
+
+## Application Screenshots
+
+The application includes several key pages:
+
+- [Home Page](docs/images/home_page.md) - Overview of the system
+- [Themes Page](docs/images/themes_page.md) - Browse and search extracted themes
+- [Questions Page](docs/images/questions_page.md) - Ask questions about themes
+- [Documents Page](docs/images/documents_page.md) - View source documents
+- [Add Theme Page](docs/images/add_theme_page.md) - Manually add new themes
 
 ## Directory Structure
 
@@ -104,6 +179,8 @@ anansi/                     # Root project directory
 │       │   ├── investorrelations/  # Investor relations PDFs
 │       │   └── sec-submissions/    # SEC filings
 │       └── {Company}/      # Other company documents
+├── docs/                   # Documentation
+│   └── images/             # Screenshots and images
 └── README.md               # This file
 ```
 
@@ -111,7 +188,6 @@ anansi/                     # Root project directory
 
 - [Backend API Documentation](./backend/README.md)
 - [Frontend Documentation](./frontend/README.md)
-- [Theme Extraction Documentation](./README_ORIGINAL.md)
 
 ## Using the System
 
@@ -149,7 +225,7 @@ The web interface provides the following pages:
 
 ### Using the Question-Answering Script with Caching
 
-The question-answering script now supports caching to improve performance for repeated operations. When you run the script, it will:
+The question-answering script supports caching to improve performance for repeated operations. When you run the script, it will:
 
 1. Cache extracted text from documents
 2. Cache document embeddings in a vector database
@@ -174,10 +250,8 @@ You can use the following options with the `run_theme_qa.sh` script:
 For Windows users, the `run_theme_qa.bat` script provides the same functionality:
 
 ```batch
-run_scripts/run_theme_qa.bat -k YOUR_OPENAI_API_KEY -c netflix -q "Your question here"
+run_scripts\run_theme_qa.bat -k YOUR_OPENAI_API_KEY -c netflix -q "Your question here"
 ```
-
-The caching system significantly improves performance for repeated questions and when processing the same documents multiple times.
 
 ## Adding a New Company
 
@@ -191,6 +265,32 @@ To add a new company to the system:
    ./run_scripts/run_theme_extractor.sh -k YOUR_OPENAI_API_KEY -c roku
    ```
 5. The company will automatically appear in the company selector in the web interface
+
+## Troubleshooting
+
+### Common Issues
+
+1. **OpenAI API Key Issues**
+   - Ensure your API key is correctly set in the `.env` file
+   - Check that the API key has sufficient quota and permissions
+
+2. **Document Processing Issues**
+   - Make sure PDF files are text-based and not scanned images
+   - Verify that JSON files follow the expected format for SEC filings
+
+3. **Backend Connection Issues**
+   - Check that the backend server is running on port 8000
+   - Verify that there are no firewall or network issues blocking the connection
+
+4. **Frontend Connection Issues**
+   - Ensure the frontend is configured to connect to the correct backend URL
+   - Check the browser console for any CORS or connection errors
+
+### Logs
+
+- Backend logs are output to the console when running the backend server
+- Frontend logs can be viewed in the browser's developer console
+- Theme extraction logs are output to the console during extraction
 
 ## Development
 

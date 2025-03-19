@@ -1,18 +1,19 @@
 /* Netflix-inspired Modern Theme */
 
 :root {
-  /* Netflix Color Palette */
+  /* Netflix Color Palette - Enhanced for better contrast */
   --netflix-red: #E50914;
   --netflix-red-hover: #F40612;
   --netflix-black: #000000;
   --netflix-dark-gray: #141414;
-  --netflix-gray: #222222;
-  --netflix-light-gray: #303030;
-  --netflix-text: #E5E5E5;
+  --netflix-gray: #1F1F1F; /* Darkened slightly for better contrast with text */
+  --netflix-light-gray: #2B2B2B; /* Darkened slightly for better contrast with text */
+  --netflix-text: #FFFFFF; /* Changed from #E5E5E5 to white for maximum contrast */
+  --netflix-text-secondary: #CCCCCC; /* New variable for secondary text with good contrast */
   --netflix-white: #FFFFFF;
-  --netflix-success: #46D369;
-  --netflix-warning: #F5B50F;
-  --netflix-error: #E87C03;
+  --netflix-success: #2ECC71; /* Brightened from #46D369 for better contrast */
+  --netflix-warning: #F39C12; /* Adjusted from #F5B50F for better contrast */
+  --netflix-error: #E74C3C; /* Brightened from #E87C03 for better contrast */
   
   /* Shadows */
   --netflix-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -44,9 +45,48 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-weight: 700; /* Increased from 600 for better visibility */
   margin-top: 0;
   color: var(--netflix-white);
+  letter-spacing: 0.5px; /* Added for better readability */
+}
+
+/* Page Titles */
+.home-page h1, .themes-page h1, .documents-page h1, .questions-page h1, .add-theme-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800; /* Extra bold for page titles */
+  letter-spacing: 0.75px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Stronger shadow for better contrast */
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+/* Add red underline to page titles */
+.home-page h1::after, .themes-page h1::after, .documents-page h1::after, 
+.questions-page h1::after, .add-theme-page h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 4px;
+  background-color: var(--netflix-red);
+  border-radius: var(--netflix-radius);
+}
+
+/* Section Titles (h2 that aren't already styled with netflix-row-title) */
+h2:not(.netflix-row-title) {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtitle styling */
+h3, h4, h5 {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Subtle shadow for better contrast */
 }
 
 a {
@@ -150,8 +190,26 @@ a:hover {
 }
 
 .netflix-hero h1 {
-  font-size: 2.5rem;
+  font-size: 2.75rem; /* Increased from 2.5rem for better visibility */
   margin-bottom: 1rem;
+  font-weight: 800; /* Extra bold for hero titles */
+  letter-spacing: 0.75px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7); /* Stronger shadow for better contrast against background image */
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+/* Add red underline to hero titles */
+.netflix-hero h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 80px;
+  height: 4px;
+  background-color: var(--netflix-red);
+  border-radius: var(--netflix-radius);
 }
 
 .netflix-hero p {
@@ -168,24 +226,28 @@ a:hover {
   box-shadow: var(--netflix-shadow-sm);
   transition: transform var(--netflix-transition), box-shadow var(--netflix-transition);
   height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Added for better visibility */
 }
 
 .netflix-card:hover {
   transform: scale(1.03);
   box-shadow: var(--netflix-shadow-md);
   z-index: 1;
+  border-color: rgba(255, 255, 255, 0.2); /* Brightened border on hover */
 }
 
 .netflix-card-header {
   background-color: var(--netflix-red);
   color: var(--netflix-white);
   padding: 1rem;
-  font-weight: 600;
+  font-weight: 700; /* Increased from 600 for better visibility */
   font-size: 1.1rem;
+  letter-spacing: 0.5px; /* Added for better readability */
 }
 
 .netflix-card-body {
   padding: 1.25rem;
+  line-height: 1.6; /* Increased from 1.5 for better readability */
 }
 
 .netflix-card-footer {
@@ -193,6 +255,7 @@ a:hover {
   padding: 0.75rem 1.25rem;
   border-top: 1px solid var(--netflix-light-gray);
   font-size: 0.9rem;
+  font-weight: 500; /* Added for better readability */
 }
 
 /* Theme Cards Row */
@@ -202,9 +265,15 @@ a:hover {
 }
 
 .netflix-row-title {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
   color: var(--netflix-white);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(229, 9, 20, 0.5);
+  position: relative;
 }
 
 .netflix-row-content {
@@ -231,37 +300,44 @@ a:hover {
   border: none;
   border-radius: var(--netflix-radius-pill);
   padding: 0.5rem 1.5rem;
-  font-weight: 500;
+  font-weight: 600; /* Increased from 500 for better visibility */
   cursor: pointer;
-  transition: background-color var(--netflix-transition-fast), transform var(--netflix-transition-fast);
+  transition: background-color var(--netflix-transition-fast), transform var(--netflix-transition-fast), box-shadow var(--netflix-transition-fast);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Added for better visibility */
 }
 
 .netflix-btn:hover {
   background-color: var(--netflix-red-hover);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
 
 .netflix-btn:active {
   transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .netflix-btn-secondary {
-  background-color: var(--netflix-gray);
+  background-color: #333333; /* Darkened from var(--netflix-gray) for better contrast */
   color: var(--netflix-white);
+  border: 1px solid #444444; /* Added border for better visibility */
 }
 
 .netflix-btn-secondary:hover {
-  background-color: var(--netflix-light-gray);
+  background-color: #444444; /* Darkened from var(--netflix-light-gray) for better contrast */
+  border-color: #555555;
 }
 
 .netflix-btn-outline {
   background-color: transparent;
   color: var(--netflix-white);
-  border: 1px solid var(--netflix-white);
+  border: 2px solid var(--netflix-white); /* Increased from 1px for better visibility */
+  font-weight: 600;
 }
 
 .netflix-btn-outline:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15); /* Increased from 0.1 for better contrast */
+  box-shadow: 0 0 0 1px var(--netflix-white); /* Added for better visibility */
 }
 
 .netflix-btn-sm {
@@ -294,16 +370,18 @@ a:hover {
   border-radius: var(--netflix-radius);
   color: var(--netflix-white);
   transition: border-color var(--netflix-transition-fast), box-shadow var(--netflix-transition-fast);
+  font-weight: 400; /* Added for better readability */
 }
 
 .netflix-form-control:focus {
   border-color: var(--netflix-red);
-  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.25);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.4); /* Increased size and opacity for better visibility */
   outline: none;
 }
 
 .netflix-form-control::placeholder {
-  color: rgba(229, 229, 229, 0.5);
+  color: rgba(255, 255, 255, 0.7); /* Brightened from 0.5 to 0.7 for better contrast */
+  font-weight: 300; /* Lighter weight to distinguish from actual text */
 }
 
 .netflix-form-select {
@@ -321,6 +399,9 @@ a:hover {
   border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 1.5rem;
+  box-shadow: var(--netflix-shadow-sm); /* Added for better visibility */
+  border-radius: var(--netflix-radius); /* Added for consistency */
+  overflow: hidden; /* Ensures the border-radius is applied properly */
 }
 
 .netflix-table th,
@@ -330,23 +411,46 @@ a:hover {
 }
 
 .netflix-table th {
-  background-color: var(--netflix-gray);
+  background-color: #333333; /* Darkened from var(--netflix-gray) for better contrast */
   color: var(--netflix-white);
-  font-weight: 600;
+  font-weight: 700; /* Increased from 600 for better visibility */
   border-bottom: 2px solid var(--netflix-red);
+  letter-spacing: 0.5px; /* Added for better readability */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Added for better contrast */
+  padding: 1.25rem 1rem; /* Increased padding for better visibility */
+}
+
+/* Style for sortable headers in tables */
+.netflix-table th[style*="cursor: pointer"] {
+  position: relative;
+  padding-right: 1.5rem; /* Extra space for sort indicator */
+}
+
+.netflix-table th[style*="cursor: pointer"]:hover {
+  background-color: #3a3a3a; /* Slightly lighter on hover */
+}
+
+.netflix-table th[style*="cursor: pointer"]::after {
+  content: '▲';
+  position: absolute;
+  right: 0.75rem;
+  opacity: 0.5;
+  font-size: 0.8rem;
 }
 
 .netflix-table td {
   border-bottom: 1px solid var(--netflix-light-gray);
+  font-weight: 400; /* Added for better readability */
 }
 
 .netflix-table tbody tr {
   background-color: var(--netflix-gray);
-  transition: background-color var(--netflix-transition-fast);
+  transition: background-color var(--netflix-transition-fast), box-shadow var(--netflix-transition-fast);
 }
 
 .netflix-table tbody tr:hover {
   background-color: var(--netflix-light-gray);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); /* Added for better visibility */
 }
 
 .netflix-table tbody tr:last-child td {
@@ -388,23 +492,28 @@ a:hover {
   padding: 1rem;
   border-radius: var(--netflix-radius);
   margin-bottom: 1rem;
+  font-weight: 500; /* Added for better readability */
+  border: 1px solid transparent; /* Added for better visibility */
 }
 
 .netflix-alert-danger {
-  background-color: rgba(232, 124, 3, 0.2);
+  background-color: rgba(231, 76, 60, 0.3); /* Increased opacity from 0.2 to 0.3 */
   border-left: 4px solid var(--netflix-error);
+  border-color: rgba(231, 76, 60, 0.5); /* Added border color */
   color: var(--netflix-white);
 }
 
 .netflix-alert-success {
-  background-color: rgba(70, 211, 105, 0.2);
+  background-color: rgba(46, 204, 113, 0.3); /* Increased opacity from 0.2 to 0.3 */
   border-left: 4px solid var(--netflix-success);
+  border-color: rgba(46, 204, 113, 0.5); /* Added border color */
   color: var(--netflix-white);
 }
 
 .netflix-alert-info {
-  background-color: rgba(0, 174, 239, 0.2);
-  border-left: 4px solid #00AEEF;
+  background-color: rgba(52, 152, 219, 0.3); /* Increased opacity from 0.2 to 0.3 and changed color */
+  border-left: 4px solid #3498db; /* Changed from #00AEEF for better contrast */
+  border-color: rgba(52, 152, 219, 0.5); /* Added border color */
   color: var(--netflix-white);
 }
 
@@ -593,18 +702,23 @@ a:hover {
   align-items: center;
   animation: slideUp var(--netflix-transition) forwards;
   max-width: 350px;
+  border: 1px solid var(--netflix-light-gray); /* Added for better visibility */
+  font-weight: 500; /* Added for better readability */
 }
 
 .netflix-toast-success {
   border-left: 4px solid var(--netflix-success);
+  background-color: rgba(46, 204, 113, 0.15); /* Added background tint */
 }
 
 .netflix-toast-error {
   border-left: 4px solid var(--netflix-error);
+  background-color: rgba(231, 76, 60, 0.15); /* Added background tint */
 }
 
 .netflix-toast-info {
-  border-left: 4px solid #00AEEF;
+  border-left: 4px solid #3498db; /* Changed from #00AEEF for better contrast */
+  background-color: rgba(52, 152, 219, 0.15); /* Added background tint */
 }
 
 .netflix-toast-icon {
@@ -677,6 +791,60 @@ a:hover {
   color: var(--netflix-text);
   font-size: 0.9rem;
   margin-top: 1rem;
+}
+
+/* Panel Component */
+.netflix-panel {
+  background-color: var(--netflix-gray);
+  border-radius: var(--netflix-radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--netflix-shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.netflix-panel-header {
+  background-color: #333333;
+  color: var(--netflix-white);
+  padding: 1rem 1.25rem;
+  font-weight: 700; /* Increased from 600 for better visibility */
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--netflix-red); /* Changed from 1px light-gray to 2px red for better visibility */
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Added for better contrast */
+}
+
+.netflix-panel-body {
+  padding: 1.25rem;
+  line-height: 1.6;
+}
+
+/* Enhanced styling for section titles within panels */
+.netflix-panel-body h5 {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--netflix-white);
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Enhanced styling for text in panels */
+.netflix-panel-body .text-small {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--netflix-text);
+  font-weight: 500;
+}
+
+.netflix-panel-footer {
+  background-color: var(--netflix-gray);
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--netflix-light-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 /* Document Page Specific */
