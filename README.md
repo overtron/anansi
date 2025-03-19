@@ -4,7 +4,7 @@ This project provides a complete system for extracting business themes from comp
 
 > **Note:** This entire project, including all code, documentation, and screenshots, was generated using Cline, an AI assistant for software development.
 
-![Home Page](docs/images/home_page.md)
+![Home Page](docs/images/screenshots/png/home_page.png)
 
 ## System Components
 
@@ -138,11 +138,22 @@ The application will be available at:
 
 The application includes several key pages:
 
-- [Home Page](docs/images/home_page.md) - Overview of the system
-- [Themes Page](docs/images/themes_page.md) - Browse and search extracted themes
-- [Questions Page](docs/images/questions_page.md) - Ask questions about themes
-- [Documents Page](docs/images/documents_page.md) - View source documents
-- [Add Theme Page](docs/images/add_theme_page.md) - Manually add new themes
+![Home Page](docs/images/screenshots/png/home_page.png)
+*Home Page - Overview of the system*
+
+![Themes Page](docs/images/screenshots/png/themes_page.png)
+*Themes Page - Browse and search extracted themes*
+
+![Questions Page](docs/images/screenshots/png/questions_page.png)
+*Questions Page - Ask questions about themes*
+
+![Documents Page](docs/images/screenshots/png/documents_page.png)
+*Documents Page - View source documents*
+
+![Add Theme Page](docs/images/screenshots/png/add_theme_page.png)
+*Add Theme Page - Manually add new themes*
+
+**Note:** The screenshots above are placeholders. When running the application, you can take actual screenshots and replace these placeholders by following the instructions in [docs/images/screenshots/png/README.md](docs/images/screenshots/png/README.md).
 
 ## Directory Structure
 
