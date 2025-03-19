@@ -2,6 +2,8 @@
 
 This project provides a complete system for extracting business themes from company investor relations documents and SEC filings, and a web interface for exploring these themes and asking questions about them. The system supports multiple companies, with Netflix included as the default example.
 
+> **Note:** This entire project, including all code, documentation, and screenshots, was generated using Cline, an AI assistant for software development.
+
 ![Home Page](docs/images/home_page.md)
 
 ## System Components
